@@ -1,0 +1,20 @@
+image: python3:latest
+
+run tests: # tests our modules using self writed unit tests and non-reggressive tests.
+    script:
+      # Using our makefile to run tests that way we can unify our usage of different cli commands
+      # And make it so our CI use a python venv
+      - cat src/Objects/.cup
+      - make tests
+    rules:
+      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'  # Run for all changes to a merge request's source branch
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH       # Run for all changes to the default branch
+
+run linter: # test correct code linter and formatting (good luck passing the CI now :evil_laugh:)
+  script:
+    - cat src/Objects/.cup
+    - make lint
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'  # Run for all changes to a merge request's source branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH       # Run for all changes to the default branch
